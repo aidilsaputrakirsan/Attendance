@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
       if (oldScript) oldScript.remove();
   
       // URL endpoint doGet() dengan parameter callback
-      const liveFeedURL = "https://script.google.com/macros/s/AKfycbyvXrf_YpACpL7ukSB-uMz41MbtV7zv1Q4HZ_aNNgjDkqmmToeozkyYF2_x2kyWrs1C/exec?callback=updateData&mk=" + encodeURIComponent("Cloud Computing");
+      const liveFeedURL = "https://script.google.com/macros/s/AKfycbxY2XAmoHmsPwwb5PLzLfxkIrD3qYpKsU_2R7_9_46IwAjfmRIJABoNsCrvNV3Rbo9_/exec" + encodeURIComponent("Cloud Computing");
       const script = document.createElement("script");
       script.id = "jsonpScript";
       script.src = liveFeedURL;
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function() {
         };
   
         // URL untuk POST absensi (gunakan deployment URL terbaru)
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxx01WvN9rVgi3tevpmp0RkUf9HJ-92zvXvA9VNBE5yi3_j1SDshXuZlDZu62vPOGKo/exec";
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxY2XAmoHmsPwwb5PLzLfxkIrD3qYpKsU_2R7_9_46IwAjfmRIJABoNsCrvNV3Rbo9_/exec";
         await fetch(scriptURL, {
           method: "POST",
           mode: "no-cors",
