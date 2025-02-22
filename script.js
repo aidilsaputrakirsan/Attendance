@@ -35,8 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
     // Fungsi menambahkan item ke live feed
     function updateLiveFeed(data) {
-      // Kosongkan daftar saat ini
-      submittedList.innerHTML = "";
+      submittedList.innerHTML = ""; // kosongkan daftar
       data.forEach((item) => {
         const div = document.createElement("div");
         div.classList.add("submitted-item");
@@ -45,28 +44,34 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
   
-    // Fungsi polling untuk ambil data live dari doGet() setiap 3 detik
+    // Callback JSONP: Fungsi ini akan dipanggil oleh Apps Script
+    window.updateData = function(response) {
+      if (response.status === "success") {
+        updateLiveFeed(response.data);
+      } else {
+        console.error("Error:", response.message);
+      }
+    };
+  
+    // Fungsi untuk memanggil doGet() menggunakan JSONP
     function fetchLiveData() {
-      // URL doGet (gunakan deployment URL yang sama; GET request akan memanggil doGet())
-      const liveFeedURL = "https://script.google.com/macros/s/AKfycbyvXrf_YpACpL7ukSB-uMz41MbtV7zv1Q4HZ_aNNgjDkqmmToeozkyYF2_x2kyWrs1C/exec";
-      fetch(liveFeedURL)
-        .then((response) => response.json())
-        .then((result) => {
-          if (result.status === "success") {
-            updateLiveFeed(result.data);
-          } else {
-            console.error("Error fetching live data:", result.message);
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching live data:", error);
-        });
+      // Hapus script JSONP lama jika ada
+      const oldScript = document.getElementById("jsonpScript");
+      if (oldScript) oldScript.remove();
+  
+      // URL endpoint doGet() dengan parameter callback
+      const liveFeedURL = "https://script.google.com/macros/s/AKfycbyvXrf_YpACpL7ukSB-uMz41MbtV7zv1Q4HZ_aNNgjDkqmmToeozkyYF2_x2kyWrs1C/exec?callback=updateData&mk=" + encodeURIComponent("Cloud Computing");
+      const script = document.createElement("script");
+      script.id = "jsonpScript";
+      script.src = liveFeedURL;
+      document.body.appendChild(script);
     }
   
     // Mulai polling setiap 3 detik
     setInterval(fetchLiveData, 3000);
+    fetchLiveData(); // panggil sekali saat awal
   
-    // Event submit form untuk mengirim absensi
+    // Event submit form untuk mengirim absensi via POST
     form.addEventListener("submit", async function(e) {
       e.preventDefault();
   
@@ -82,9 +87,8 @@ document.addEventListener("DOMContentLoaded", function() {
   
       loader.style.display = "block";
       try {
-        const lokasi = await getLocation();
+        const lokasi = await getLocation().catch(() => "");
         document.getElementById("lokasi").value = lokasi;
-  
         const data = {
           name: nama,
           nim: nim,
@@ -93,10 +97,8 @@ document.addEventListener("DOMContentLoaded", function() {
           lokasi: lokasi
         };
   
-        // URL web app untuk POST (gunakan deployment URL terbaru)
-        const scriptURL = "https://script.google.com/macros/s/AKfycbz9FKRuL-kxzEKmWy6gIDQaOZiZJPNzcWHsEDojGY9827-s-Fd-fvkFgpFYL7whHrI/exec";
-  
-        // Kirim data absensi dengan POST menggunakan mode "no-cors"
+        // URL untuk POST absensi (gunakan deployment URL terbaru)
+        const scriptURL = "https://script.google.com/macros/s/AKfycbxx01WvN9rVgi3tevpmp0RkUf9HJ-92zvXvA9VNBE5yi3_j1SDshXuZlDZu62vPOGKo/exec";
         await fetch(scriptURL, {
           method: "POST",
           mode: "no-cors",
@@ -105,7 +107,6 @@ document.addEventListener("DOMContentLoaded", function() {
           },
           body: JSON.stringify(data)
         });
-  
         showSnackbar("Absensi berhasil!");
         form.reset();
       } catch (error) {
