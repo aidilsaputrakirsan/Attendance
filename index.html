@@ -28,6 +28,11 @@
       max-width: 400px;
       display: grid;
       grid-gap: 15px;
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     h1 {
       text-align: center;
@@ -38,7 +43,7 @@
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      transition: border 0.3s;
+      transition: border 0.3s, transform 0.2s;
     }
     input:focus, select:focus {
       border-color: var(--primary-color);
@@ -49,10 +54,13 @@
       color: var(--secondary-color);
       border: none;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, transform 0.2s;
     }
     button:hover {
       background-color: var(--hover-color);
+    }
+    button:active {
+      transform: scale(0.98);
     }
     .loader {
       border: 6px solid #f3f3f3;
@@ -81,8 +89,8 @@
       left: 50%;
       bottom: 30px;
       transform: translateX(-50%);
-      transition: visibility 0s, opacity 0.5s ease-in-out;
       opacity: 0;
+      transition: opacity 0.5s ease-in-out;
     }
     .snackbar.show {
       visibility: visible;
@@ -105,8 +113,8 @@
       <select id="mataKuliah" name="mataKuliah" required>
         <option value="">Pilih Mata Kuliah</option>
         <option value="Cloud Computing">Cloud Computing</option>
-        <option value="Pemrograman">Pemrograman</option>
-        <option value="Matematika Diskrit">Matematika Diskrit</option>
+        <option value="Pemrograman Web">Pemrograman Web</option>
+        <option value="Desain dan Manajemen Jaringan Komputer">Desain dan Manajemen Jaringan Komputer</option>
       </select>
       <!-- Lokasi akan didapatkan secara otomatis -->
       <input type="hidden" id="lokasi" name="lokasi">
