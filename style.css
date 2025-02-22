@@ -1,0 +1,183 @@
+/* ========== GLOBAL STYLES ========== */
+:root {
+    --primary-color: #4caf50;
+    --secondary-color: #1e1e1e; /* Warna dasar latar container (gelap) */
+    --text-color: #ffffff;
+    --hover-color: #45a049;
+    --accent-color: #333;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #000; /* Latar belakang utama lebih gelap */
+    color: var(--text-color);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+  
+  /* ========== ANIMASI BACKGROUND ========== */
+  .background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: radial-gradient(circle at center, #2f2f2f, #000);
+    opacity: 0.8;
+    animation: animateBg 8s infinite alternate ease-in-out;
+  }
+  
+  @keyframes animateBg {
+    0% {
+      background: radial-gradient(circle at center, #2f2f2f, #000);
+    }
+    100% {
+      background: radial-gradient(circle at 40% 60%, #191919, #000);
+    }
+  }
+  
+  /* ========== CONTAINER ========== */
+  .container {
+    position: relative;
+    z-index: 1; /* Agar berada di atas background-animation */
+    background: var(--secondary-color);
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 400px;
+    margin: 50px auto; /* Agar container berada di tengah vertical */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+    display: grid;
+    grid-gap: 15px;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  h1 {
+    text-align: center;
+    color: var(--primary-color);
+  }
+  
+  /* ========== FORM ELEMENTS ========== */
+  input,
+  select,
+  button {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    background-color: #2a2a2a;
+    color: var(--text-color);
+    transition: background-color 0.3s, transform 0.2s, border 0.3s;
+  }
+  
+  input:focus,
+  select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+  }
+  
+  button {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: var(--hover-color);
+  }
+  
+  button:active {
+    transform: scale(0.98);
+  }
+  
+  /* ========== LOADER ========== */
+  .loader {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid var(--primary-color);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+    display: none;
+    margin: 0 auto;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  /* ========== SNACKBAR (NOTIFIKASI) ========== */
+  .snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 9999;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+  }
+  
+  .snackbar.show {
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* ========== SUBMITTED LIST (DATA MAHASISWA) ========== */
+  .submitted-list {
+    margin-top: 10px;
+    border-top: 1px solid #444;
+    padding-top: 10px;
+  }
+  
+  .submitted-item {
+    margin-bottom: 8px;
+    background: #2a2a2a;
+    padding: 10px;
+    border-radius: 4px;
+    animation: fadeInItem 0.5s ease;
+  }
+  
+  @keyframes fadeInItem {
+    from {
+      opacity: 0;
+      transform: translateX(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
