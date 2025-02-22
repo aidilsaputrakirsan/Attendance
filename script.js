@@ -1,4 +1,3 @@
-// Setelah halaman termuat
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById("absensiForm");
     const loader = document.getElementById("loader");
@@ -14,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
       }, 3000);
     }
   
-    // Fungsi mendapatkan lokasi (jika diperlukan)
+    // Fungsi mendapatkan lokasi (opsional)
     function getLocation() {
       return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
@@ -34,25 +33,48 @@ document.addEventListener("DOMContentLoaded", function() {
       });
     }
   
-    // Fungsi untuk menambahkan item mahasiswa yang baru absen ke daftar
-    function addSubmittedItem(nama, nim) {
-      const item = document.createElement("div");
-      item.classList.add("submitted-item");
-      item.textContent = `Nama: ${nama} | NIM: ${nim}`;
-      submittedList.prepend(item); // prepend agar item terbaru di atas
+    // Fungsi menambahkan item ke live feed
+    function updateLiveFeed(data) {
+      // Kosongkan daftar saat ini
+      submittedList.innerHTML = "";
+      data.forEach((item) => {
+        const div = document.createElement("div");
+        div.classList.add("submitted-item");
+        div.textContent = `Nama: ${item.name} | NIM: ${item.nim}`;
+        submittedList.appendChild(div);
+      });
     }
   
-    // Event saat form di-submit
+    // Fungsi polling untuk ambil data live dari doGet() setiap 3 detik
+    function fetchLiveData() {
+      // URL doGet (gunakan deployment URL yang sama; GET request akan memanggil doGet())
+      const liveFeedURL = "https://script.google.com/macros/s/AKfycbyvXrf_YpACpL7ukSB-uMz41MbtV7zv1Q4HZ_aNNgjDkqmmToeozkyYF2_x2kyWrs1C/exec";
+      fetch(liveFeedURL)
+        .then((response) => response.json())
+        .then((result) => {
+          if (result.status === "success") {
+            updateLiveFeed(result.data);
+          } else {
+            console.error("Error fetching live data:", result.message);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching live data:", error);
+        });
+    }
+  
+    // Mulai polling setiap 3 detik
+    setInterval(fetchLiveData, 3000);
+  
+    // Event submit form untuk mengirim absensi
     form.addEventListener("submit", async function(e) {
       e.preventDefault();
   
-      // Ambil nilai dari input
       const nama = document.getElementById("nama").value.trim();
       const nim = document.getElementById("nim").value.trim();
       const kelas = document.getElementById("kelas").value;
       const mataKuliah = document.getElementById("mataKuliah").value;
   
-      // Validasi sederhana di sisi klien
       if (!nama || !nim || !kelas || !mataKuliah) {
         showSnackbar("Mohon lengkapi semua data.");
         return;
@@ -60,11 +82,9 @@ document.addEventListener("DOMContentLoaded", function() {
   
       loader.style.display = "block";
       try {
-        // Ambil lokasi (opsional, bisa dihapus jika tidak ingin lokasi)
         const lokasi = await getLocation();
         document.getElementById("lokasi").value = lokasi;
   
-        // Data yang akan dikirim ke Apps Script
         const data = {
           name: nama,
           nim: nim,
@@ -73,11 +93,10 @@ document.addEventListener("DOMContentLoaded", function() {
           lokasi: lokasi
         };
   
-        // Ganti dengan URL Web App Google Apps Script Anda
-        const scriptURL =
-          "https://script.google.com/macros/s/AKfycbzh5oPuajwPqq8rGLF-PG_WiGy6fxg8pzxuL69OcYWmvGMP32lOWxXDY3rZbvOEZJvK/exec";
+        // URL web app untuk POST (gunakan deployment URL terbaru)
+        const scriptURL = "https://script.google.com/macros/s/AKfycbz9FKRuL-kxzEKmWy6gIDQaOZiZJPNzcWHsEDojGY9827-s-Fd-fvkFgpFYL7whHrI/exec";
   
-        // Gunakan mode "no-cors" agar request tidak diblokir oleh CORS
+        // Kirim data absensi dengan POST menggunakan mode "no-cors"
         await fetch(scriptURL, {
           method: "POST",
           mode: "no-cors",
@@ -87,12 +106,8 @@ document.addEventListener("DOMContentLoaded", function() {
           body: JSON.stringify(data)
         });
   
-        // Karena respons "opaque", kita anggap sukses jika tidak ada error jaringan
         showSnackbar("Absensi berhasil!");
         form.reset();
-  
-        // Tampilkan data mahasiswa yang baru absen di bawah form
-        addSubmittedItem(nama, nim);
       } catch (error) {
         showSnackbar(error);
       } finally {

@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Aplikasi Absensi</title>
+  <title>Aplikasi Absensi - Tema Gelap</title>
   <!-- Link ke style.css -->
   <link rel="icon" href="icon.png" type="image/png">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="background-animation"></div> <!-- Elemen untuk animasi background -->
+  <div class="background-animation"></div>
   
   <div class="container">
     <h1>Absensi Mahasiswa</h1>
@@ -29,7 +29,7 @@
           Desain dan Manajemen Jaringan Komputer
         </option>
       </select>
-      <!-- Lokasi akan didapatkan secara otomatis -->
+      <!-- Lokasi didapatkan secara otomatis -->
       <input type="hidden" id="lokasi" name="lokasi" />
       <button type="submit">Submit Absensi</button>
     </form>
@@ -37,7 +37,7 @@
     <!-- Loader -->
     <div class="loader" id="loader"></div>
 
-    <!-- Daftar mahasiswa yang baru saja absen -->
+    <!-- Live Feed: Data mahasiswa yang sudah absen -->
     <div id="submittedList" class="submitted-list"></div>
   </div>
 
