@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Absensi Mahasiswa</title>
+  <title>Absensi Mahasiswa 1</title>
   <style>
     :root {
       --primary-color: #4CAF50;
@@ -108,7 +108,6 @@
         <option value="">Pilih Kelas</option>
         <option value="A">A</option>
         <option value="B">B</option>
-        <!-- Tambahkan kelas lain jika perlu -->
       </select>
       <select id="mataKuliah" name="mataKuliah" required>
         <option value="">Pilih Mata Kuliah</option>
@@ -116,7 +115,7 @@
         <option value="Pemrograman Web">Pemrograman Web</option>
         <option value="Desain dan Manajemen Jaringan Komputer">Desain dan Manajemen Jaringan Komputer</option>
       </select>
-      <!-- Lokasi akan didapatkan secara otomatis -->
+      <!-- Lokasi didapatkan secara otomatis -->
       <input type="hidden" id="lokasi" name="lokasi">
       <button type="submit">Submit Absensi</button>
     </form>
@@ -178,21 +177,18 @@
             lokasi: lokasi
           };
           const scriptURL = "https://script.google.com/macros/s/AKfycbyvXrf_YpACpL7ukSB-uMz41MbtV7zv1Q4HZ_aNNgjDkqmmToeozkyYF2_x2kyWrs1C/exec";
-          const response = await fetch(scriptURL, {
+          // Gunakan mode "no-cors" karena Apps Script tidak menyediakan CORS header.
+          await fetch(scriptURL, {
             method: "POST",
-            mode: "cors",
+            mode: "no-cors",
             headers: {
               "Content-Type": "application/json"
             },
             body: JSON.stringify(data)
           });
-          const result = await response.json();
-          if (result.status === "success") {
-            showSnackbar("Absensi berhasil!");
-            form.reset();
-          } else {
-            showSnackbar(result.message || "Terjadi kesalahan.");
-          }
+          // Karena respons bersifat opaque, anggap sukses jika fetch tidak throw error.
+          showSnackbar("Absensi berhasil!");
+          form.reset();
         } catch (error) {
           showSnackbar(error);
         } finally {
