@@ -55,17 +55,17 @@ document.addEventListener("DOMContentLoaded", function() {
   
     // Fungsi untuk memanggil doGet() menggunakan JSONP
     function fetchLiveData() {
-      // Hapus script JSONP lama jika ada
-      const oldScript = document.getElementById("jsonpScript");
-      if (oldScript) oldScript.remove();
-  
-      // URL endpoint doGet() dengan parameter callback
-      const liveFeedURL = "https://script.google.com/macros/s/AKfycbxY2XAmoHmsPwwb5PLzLfxkIrD3qYpKsU_2R7_9_46IwAjfmRIJABoNsCrvNV3Rbo9_/exec" + encodeURIComponent("Cloud Computing");
-      const script = document.createElement("script");
-      script.id = "jsonpScript";
-      script.src = liveFeedURL;
-      document.body.appendChild(script);
-    }
+        // Hapus script JSONP lama jika ada
+        const oldScript = document.getElementById("jsonpScript");
+        if (oldScript) oldScript.remove();
+      
+        // Pastikan URL dibentuk dengan benar:
+        const liveFeedURL = "https://script.google.com/macros/s/AKfycbxY2XAmoHmsPwwb5PLzLfxkIrD3qYpKsU_2R7_9_46IwAjfmRIJABoNsCrvNV3Rbo9_/exec?callback=updateData&mk=" + encodeURIComponent("Cloud Computing");
+        const script = document.createElement("script");
+        script.id = "jsonpScript";
+        script.src = liveFeedURL;
+        document.body.appendChild(script);
+      }      
   
     // Mulai polling setiap 3 detik
     setInterval(fetchLiveData, 3000);
