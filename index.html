@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Aplikasi Absensi</title>
-  <!-- Link ke style.css -->
   <link rel="icon" href="icon.png" type="image/png">
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -20,7 +19,7 @@
         <option value="">Pilih Kelas</option>
         <option value="A">A</option>
         <option value="B">B</option>
-        <option value="B">-</option>
+        <option value="-">-</option>
       </select>
       <select id="mataKuliah" name="mataKuliah" required>
         <option value="">Pilih Mata Kuliah</option>
@@ -35,17 +34,29 @@
       <button type="submit">Submit Absensi</button>
     </form>
 
+    <!-- Dropdown untuk memilih MK live feed -->
+    <div class="mk-selection">
+      <label for="liveMK">Pilih MK untuk Lihat Absensi:</label>
+      <select id="liveMK">
+        <option value="Cloud Computing">Cloud Computing</option>
+        <option value="Pemrograman Web">Pemrograman Web</option>
+        <option value="Desain dan Manajemen Jaringan Komputer">
+          Desain dan Manajemen Jaringan Komputer
+        </option>
+      </select>
+    </div>
+
     <!-- Loader -->
     <div class="loader" id="loader"></div>
 
-    <!-- Live Feed: Data mahasiswa yang sudah absen -->
+    <!-- Live Feed: Data absensi untuk MK yang dipilih (hanya satu pekan aktif) -->
+    <h2>Live - Pekan ke: <span id="currentPekan">?</span></h2>
     <div id="submittedList" class="submitted-list"></div>
   </div>
 
   <!-- Snackbar -->
   <div id="snackbar" class="snackbar"></div>
 
-  <!-- Link ke script.js -->
   <script src="script.js"></script>
 </body>
 </html>
