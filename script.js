@@ -3,7 +3,9 @@ document.addEventListener("DOMContentLoaded", function() {
   const loader = document.getElementById("loader");
   const snackbar = document.getElementById("snackbar");
   const submittedList = document.getElementById("submittedList");
-  const liveMK = document.getElementById("liveMK");
+  // Periksa apakah elemen liveMK ada; jika tidak, default ke objek dengan value "Cloud Computing"
+  const liveMKElement = document.getElementById("liveMK");
+  const liveMK = liveMKElement ? liveMKElement : { value: "Cloud Computing" };
   const currentPekanLabel = document.getElementById("currentPekan");
 
   // Fungsi menampilkan snackbar
@@ -35,22 +37,31 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // Fungsi menambahkan data ke live feed
+  // Fungsi menambahkan data ke live feed dengan transisi halus
   function updateLiveFeed(data) {
-    submittedList.innerHTML = ""; // kosongkan daftar
-    // Jika ada data, ambil pekan aktif dari baris pertama
-    if (data.length > 0) {
-      currentPekanLabel.textContent = data[0].pekan;
-    } else {
-      currentPekanLabel.textContent = "-";
-    }
-    data.forEach((item) => {
-      const div = document.createElement("div");
-      div.classList.add("submitted-item");
-      // Tampilkan Nama dan NIM saja
-      div.textContent = `Nama: ${item.name} | NIM: ${item.nim}`;
-      submittedList.appendChild(div);
-    });
+    // Tambahkan kelas fade-out untuk memulai transisi keluar
+    submittedList.classList.add("fade-out");
+    setTimeout(() => {
+      submittedList.innerHTML = "";
+      // Jika ada data, tampilkan pekan dari baris pertama; jika tidak, tampilkan "-"
+      if (data.length > 0) {
+        currentPekanLabel.textContent = data[0].pekan;
+      } else {
+        currentPekanLabel.textContent = "-";
+      }
+      data.forEach((item) => {
+        const div = document.createElement("div");
+        div.classList.add("submitted-item");
+        div.textContent = `Nama: ${item.name} | NIM: ${item.nim}`;
+        submittedList.appendChild(div);
+      });
+      // Hapus kelas fade-out dan tambahkan fade-in
+      submittedList.classList.remove("fade-out");
+      submittedList.classList.add("fade-in");
+      setTimeout(() => {
+        submittedList.classList.remove("fade-in");
+      }, 500);
+    }, 300);
   }
 
   // Callback JSONP: fungsi yang akan dipanggil oleh Apps Script
@@ -69,9 +80,8 @@ document.addEventListener("DOMContentLoaded", function() {
     if (oldScript) oldScript.remove();
 
     const baseURL = "https://script.google.com/macros/s/AKfycbx3SskQQKGIjjBdLVypcfxlM-lMnlIJZyKVfmIBD3YZlQpKGumQi8oH8x6kyZvpUSQI/exec";
-    // Ambil MK yang dipilih dari dropdown liveMK
+    // Ambil MK yang dipilih dari dropdown (gunakan liveMK.value)
     const selectedMK = liveMK.value;
-    // URL dengan parameter callback dan sheet (selected MK)
     const liveFeedURL = `${baseURL}?callback=updateData&sheet=${encodeURIComponent(selectedMK)}`;
     
     const script = document.createElement("script");
@@ -85,7 +95,9 @@ document.addEventListener("DOMContentLoaded", function() {
   fetchLiveData(); // panggil sekali saat awal
 
   // Jika pengguna mengganti pilihan MK live feed, segera refresh data
-  liveMK.addEventListener("change", fetchLiveData);
+  if (liveMKElement) {
+    liveMKElement.addEventListener("change", fetchLiveData);
+  }
 
   // Event submit form untuk mengirim data absensi via POST
   form.addEventListener("submit", async function(e) {
