@@ -2,73 +2,109 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Aplikasi Absensi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="description" content="Aplikasi Absensi Mahasiswa - Sistem absensi online untuk perkuliahan" />
+  <meta name="theme-color" content="#4caf50" />
+  <title>Aplikasi Absensi Mahasiswa</title>
   <link rel="icon" href="icon.png" type="image/png">
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
-  <!-- Font Awesome -->
+  <!-- Preload fonts for better performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="background-animation"></div>
+  <div class="background-animation" aria-hidden="true"></div>
   
-  <div class="container">
-    <h1><i class="fa-solid fa-user-check"></i> Absensi Mahasiswa</h1>
-    <form id="absensiForm">
+  <main class="container">
+    <h1><i class="fa-solid fa-user-check" aria-hidden="true"></i> Absensi Mahasiswa</h1>
+    
+    <form id="absensiForm" autocomplete="on">
       <div class="input-group">
-        <i class="fa-solid fa-user"></i>
-        <input type="text" id="nama" name="nama" placeholder="Nama" required />
+        <label for="nama" class="visually-hidden">Nama Lengkap</label>
+        <i class="fa-solid fa-user" aria-hidden="true"></i>
+        <input 
+          type="text" 
+          id="nama" 
+          name="nama" 
+          placeholder="Nama Lengkap" 
+          required 
+          autocomplete="name"
+          minlength="3"
+          pattern="[A-Za-z\s]+"
+          title="Masukkan nama lengkap (hanya huruf dan spasi)"
+        />
       </div>
+
       <div class="input-group">
-        <i class="fa-solid fa-id-badge"></i>
-        <input type="text" id="nim" name="nim" placeholder="NIM" required />
+        <label for="nim" class="visually-hidden">Nomor Induk Mahasiswa</label>
+        <i class="fa-solid fa-id-badge" aria-hidden="true"></i>
+        <input 
+          type="text" 
+          id="nim" 
+          name="nim" 
+          placeholder="NIM" 
+          required 
+          pattern="[0-9]+"
+          minlength="8"
+          maxlength="10"
+          title="Masukkan NIM (8-10 digit angka)"
+        />
       </div>
+
       <div class="input-group">
-        <i class="fa-solid fa-chalkboard"></i>
+        <label for="kelas" class="visually-hidden">Pilih Kelas</label>
+        <i class="fa-solid fa-chalkboard" aria-hidden="true"></i>
         <select id="kelas" name="kelas" required>
-          <option value="">Pilih Kelas</option>
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="-">-</option>
+          <option value="" disabled selected>Pilih Kelas</option>
+          <option value="A">Kelas A</option>
+          <option value="B">Kelas B</option>
+          <option value="-">Lainnya</option>
         </select>
       </div>
+
       <div class="input-group">
-        <i class="fa-solid fa-book"></i>
+        <label for="mataKuliah" class="visually-hidden">Pilih Mata Kuliah</label>
+        <i class="fa-solid fa-book" aria-hidden="true"></i>
         <select id="mataKuliah" name="mataKuliah" required>
-          <option value="">Pilih Mata Kuliah</option>
+          <option value="" disabled selected>Pilih Mata Kuliah</option>
           <option value="Cloud Computing">Cloud Computing</option>
           <option value="Pemrograman Web">Pemrograman Web</option>
           <option value="Desain dan Manajemen Jaringan Komputer">Desain dan Manajemen Jaringan Komputer</option>
         </select>
       </div>
-      <!-- Lokasi didapatkan secara otomatis -->
+
       <input type="hidden" id="lokasi" name="lokasi" />
-      <button type="submit"><i class="fa-solid fa-paper-plane"></i> Submit Absensi</button>
+      
+      <button type="submit" class="submit-btn">
+        <i class="fa-solid fa-paper-plane" aria-hidden="true"></i>
+        <span>Submit Absensi</span>
+        <div class="button-loader" aria-hidden="true"></div>
+      </button>
     </form>
 
-    <!-- Dropdown untuk memilih MK live feed -->
-    <div class="mk-selection">
-      <label for="liveMK">Pilih MK untuk Lihat Absensi:</label>
-      <select id="liveMK">
-        <option value="Cloud Computing">Cloud Computing</option>
-        <option value="Pemrograman Web">Pemrograman Web</option>
-        <option value="Desain dan Manajemen Jaringan Komputer">Desain dan Manajemen Jaringan Komputer</option>
-      </select>
-    </div>
+    <section class="live-feed">
+      <div class="mk-selection">
+        <label for="liveMK">Pilih MK untuk Lihat Absensi:</label>
+        <select id="liveMK">
+          <option value="Cloud Computing">Cloud Computing</option>
+          <option value="Pemrograman Web">Pemrograman Web</option>
+          <option value="Desain dan Manajemen Jaringan Komputer">Desain dan Manajemen Jaringan Komputer</option>
+        </select>
+      </div>
 
-    <!-- Loader -->
-    <div class="loader" id="loader"></div>
+      <div class="live-feed-header">
+        <h2>Live - Pekan ke: <span id="currentPekan" aria-live="polite">?</span></h2>
+        <div class="loader" id="loader" role="status" aria-label="Memuat data..."></div>
+      </div>
 
-    <!-- Live Feed: Data absensi untuk MK yang dipilih (hanya satu pekan aktif) -->
-    <h2>Live - Pekan ke: <span id="currentPekan">?</span></h2>
-    <div id="submittedList" class="submitted-list"></div>
-  </div>
+      <div id="submittedList" class="submitted-list" aria-live="polite"></div>
+    </section>
+  </main>
 
-  <!-- Snackbar -->
-  <div id="snackbar" class="snackbar"></div>
+  <div id="snackbar" class="snackbar" role="alert" aria-live="polite"></div>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
