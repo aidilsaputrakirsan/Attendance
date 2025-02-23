@@ -39,15 +39,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Fungsi menambahkan data ke live feed dengan transisi halus
   function updateLiveFeed(data) {
-    // Tambahkan kelas fade-out untuk memulai transisi keluar
     submittedList.classList.add("fade-out");
     setTimeout(() => {
       submittedList.innerHTML = "";
-      // Jika ada data, tampilkan pekan dari baris pertama; jika tidak, tampilkan "-"
-      if (data.length > 0) {
-        currentPekanLabel.textContent = data[0].pekan;
-      } else {
-        currentPekanLabel.textContent = "-";
+      // Jika ada data, perbarui label currentPekan jika elemen tersedia
+      if (currentPekanLabel) {
+        currentPekanLabel.textContent = data.length > 0 ? data[0].pekan : "-";
       }
       data.forEach((item) => {
         const div = document.createElement("div");
@@ -55,7 +52,6 @@ document.addEventListener("DOMContentLoaded", function() {
         div.textContent = `Nama: ${item.name} | NIM: ${item.nim}`;
         submittedList.appendChild(div);
       });
-      // Hapus kelas fade-out dan tambahkan fade-in
       submittedList.classList.remove("fade-out");
       submittedList.classList.add("fade-in");
       setTimeout(() => {
