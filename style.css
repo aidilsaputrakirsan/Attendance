@@ -8,6 +8,11 @@
   --background-gradient-start: #2f2f2f;
   --background-gradient-end: #000;
   --glass-border: rgba(255, 255, 255, 0.2);
+  --input-bg: rgba(42, 42, 42, 0.95);
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 1rem;
+  --spacing-md: 1.5rem;
+  --spacing-lg: 2rem;
 }
 
 * {
@@ -23,9 +28,10 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   position: relative;
+  line-height: 1.6;
 }
 
-/* ========== ANIMASI BACKGROUND ========== */
+/* ========== BACKGROUND ANIMATION ========== */
 .background-animation {
   position: fixed;
   top: 0;
@@ -47,24 +53,170 @@ body {
   }
 }
 
-/* ========== CONTAINER (Glassmorphism) ========== */
+/* ========== CONTAINER ========== */
 .container {
   position: relative;
   z-index: 1;
   background: var(--secondary-color);
-  padding: 20px 30px;
-  border-radius: 12px;
-  width: 90%;
-  max-width: 400px;
-  margin: 50px auto;
+  padding: var(--spacing-lg);
+  border-radius: 16px;
+  width: 95%;
+  max-width: 480px;
+  margin: var(--spacing-lg) auto;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
   backdrop-filter: blur(8px);
   border: 1px solid var(--glass-border);
   display: grid;
-  grid-gap: 15px;
+  grid-gap: var(--spacing-md);
   animation: fadeIn 1s ease-in-out;
 }
 
+@media (min-width: 768px) {
+  .container {
+    width: 90%;
+    padding: var(--spacing-lg) var(--spacing-lg);
+  }
+}
+
+h1 {
+  text-align: center;
+  color: var(--primary-color);
+  margin-bottom: var(--spacing-md);
+  font-size: 1.75rem;
+}
+
+h1 i {
+  margin-right: var(--spacing-xs);
+}
+
+/* ========== FORM ELEMENTS ========== */
+.input-group {
+  position: relative;
+  margin-bottom: var(--spacing-md);
+}
+
+.input-group i {
+  position: absolute;
+  top: 50%;
+  left: var(--spacing-sm);
+  transform: translateY(-50%);
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) 2.5rem;
+  border: 2px solid var(--accent-color);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  min-height: 48px; /* Minimum touch target size */
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+}
+
+/* ========== BUTTON STYLES ========== */
+button {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: none;
+  border-radius: 8px;
+  background-color: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+  font-weight: 500;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
+button:hover {
+  background-color: var(--hover-color);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* ========== MK SELECTION ========== */
+.mk-selection {
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--accent-color);
+}
+
+.mk-selection label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.mk-selection select {
+  width: 100%;
+  padding: var(--spacing-sm);
+  border: 2px solid var(--accent-color);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  min-height: 48px;
+}
+
+/* ========== SUBMITTED LIST ========== */
+.submitted-list {
+  margin-top: var(--spacing-md);
+  max-height: 300px;
+  overflow-y: auto;
+  padding: var(--spacing-xs);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.submitted-item {
+  margin-bottom: var(--spacing-xs);
+  background: var(--input-bg);
+  padding: var(--spacing-sm);
+  border-radius: 6px;
+  animation: fadeInItem 0.5s ease;
+  border: 1px solid var(--accent-color);
+}
+
+/* ========== RESPONSIVE ADJUSTMENTS ========== */
+@media (max-width: 480px) {
+  :root {
+    --spacing-lg: 1.5rem;
+    --spacing-md: 1rem;
+    --spacing-sm: 0.75rem;
+  }
+
+  .container {
+    padding: var(--spacing-md);
+    margin: var(--spacing-sm) auto;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* ========== ANIMATIONS ========== */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -76,141 +228,6 @@ body {
   }
 }
 
-h1 {
-  text-align: center;
-  color: var(--primary-color);
-}
-
-/* ========== FORM ELEMENTS ========== */
-.input-group {
-  position: relative;
-}
-
-.input-group i {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-50%);
-  color: var(--primary-color);
-}
-
-.input-group input,
-.input-group select {
-  width: 100%;
-  padding: 10px 10px 10px 35px;
-  border: 1px solid var(--accent-color);
-  border-radius: 4px;
-  background-color: #2a2a2a;
-  color: var(--text-color);
-  transition: background-color 0.3s, transform 0.2s, border 0.3s;
-}
-
-.input-group input:focus,
-.input-group select:focus {
-  border-color: var(--primary-color);
-  outline: none;
-}
-
-button {
-  width: 100%;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  background-color: var(--primary-color);
-  color: #fff;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-  font-size: 16px;
-}
-
-button:hover {
-  background-color: var(--hover-color);
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
-/* ========== MK Selection ========== */
-.mk-selection {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.mk-selection label {
-  font-weight: 500;
-}
-
-.mk-selection select {
-  padding: 10px;
-  border: 1px solid var(--accent-color);
-  border-radius: 4px;
-  background-color: #2a2a2a;
-  color: var(--text-color);
-}
-
-/* ========== LOADER ========== */
-.loader {
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid var(--primary-color);
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  animation: spin 1s linear infinite;
-  display: none;
-  margin: 10px auto;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* ========== SNACKBAR ========== */
-.snackbar {
-  visibility: hidden;
-  min-width: 250px;
-  background-color: #333;
-  color: #fff;
-  text-align: center;
-  border-radius: 2px;
-  padding: 16px;
-  position: fixed;
-  z-index: 9999;
-  left: 50%;
-  bottom: 30px;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.5s ease-in-out;
-}
-
-.snackbar.show {
-  visibility: visible;
-  opacity: 1;
-}
-
-/* ========== SUBMITTED LIST (LIVE FEED) ========== */
-.submitted-list {
-  margin-top: 10px;
-  border-top: 1px solid #444;
-  padding-top: 10px;
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.submitted-item {
-  margin-bottom: 8px;
-  background: #2a2a2a;
-  padding: 10px;
-  border-radius: 4px;
-  animation: fadeInItem 0.5s ease;
-}
-
 @keyframes fadeInItem {
   from {
     opacity: 0;
@@ -220,4 +237,42 @@ button:active {
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+/* Maintain existing loader and snackbar styles */
+.loader {
+  border: 4px solid var(--accent-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+  display: none;
+  margin: var(--spacing-sm) auto;
+}
+
+.snackbar {
+  visibility: hidden;
+  min-width: 280px;
+  background-color: rgba(51, 51, 51, 0.95);
+  color: #fff;
+  text-align: center;
+  border-radius: 8px;
+  padding: var(--spacing-sm);
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  bottom: var(--spacing-lg);
+  transform: translateX(-50%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.snackbar.show {
+  visibility: visible;
+  animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
