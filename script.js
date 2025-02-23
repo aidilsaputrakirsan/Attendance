@@ -7,6 +7,15 @@ document.addEventListener("DOMContentLoaded", function() {
   const liveMK = liveMKElement ? liveMKElement : { value: "Cloud Computing" };
   const currentPekanLabel = document.getElementById("currentPekan");
 
+  // Waktu maksimal polling (dalam ms) → 7 menit
+  const MAX_POLLING_DURATION = 7 * 60 * 1000; // 420.000 ms
+  // Interval polling (dalam ms) → 5 detik
+  const POLLING_INTERVAL = 5000;
+
+  // Variabel untuk menyimpan ID interval dan waktu mulai polling
+  let pollIntervalId = null;
+  let pollStartTime = null;
+
   function showSnackbar(message) {
     snackbar.textContent = message;
     snackbar.className = "snackbar show";
@@ -34,19 +43,18 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
+  // Update live feed dengan transisi halus
   function updateLiveFeed(data) {
-    // Tambahkan transisi halus
     submittedList.classList.add("fade-out");
     setTimeout(() => {
       submittedList.innerHTML = "";
-      // Update label currentPekan jika data tersedia
       if (currentPekanLabel) {
         currentPekanLabel.textContent = data.length > 0 ? data[0].pekan : "-";
       }
       data.forEach((item) => {
         const div = document.createElement("div");
         div.classList.add("submitted-item");
-        // Format tampilannya: "Name - NIM"
+        // Format sederhana: "Name - NIM"
         div.textContent = `${item.name} - ${item.nim}`;
         submittedList.appendChild(div);
       });
@@ -67,36 +75,64 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
 
+  // Fungsi memanggil doGet() via JSONP
   function fetchLiveData() {
     const oldScript = document.getElementById("jsonpScript");
     if (oldScript) oldScript.remove();
+
+    // Ganti baseURL dengan URL Web App deployment Anda
     const baseURL = "https://script.google.com/macros/s/AKfycbzQcm6b6ej9XEei8Jd-o1P684w-YEmY46e5MLmxv6bRvL-_aFjX3yXorIpoANomjKea/exec";
     const selectedMK = liveMK.value;
     const liveFeedURL = `${baseURL}?callback=updateData&sheet=${encodeURIComponent(selectedMK)}`;
+
     const script = document.createElement("script");
     script.id = "jsonpScript";
     script.src = liveFeedURL;
     document.body.appendChild(script);
   }
 
-  // Polling live feed setiap 3 detik
-  setInterval(fetchLiveData, 3000);
-  fetchLiveData();
+  /**
+   * Mulai polling setiap 5 detik, hentikan setelah 7 menit
+   */
+  function startPolling() {
+    pollStartTime = Date.now();
+    pollIntervalId = setInterval(() => {
+      const elapsed = Date.now() - pollStartTime;
+      if (elapsed >= MAX_POLLING_DURATION) {
+        // Hentikan polling
+        clearInterval(pollIntervalId);
+        pollIntervalId = null;
+        showSnackbar("Live feed dihentikan otomatis setelah 7 menit.");
+        return;
+      }
+      // Lanjutkan fetch data
+      fetchLiveData();
+    }, POLLING_INTERVAL);
+    // Jalankan fetch pertama segera
+    fetchLiveData();
+  }
 
+  // Panggil startPolling() setelah DOM siap
+  startPolling();
+
+  // Jika pengguna ganti MK live feed, segera refresh data
   if (liveMKElement) {
     liveMKElement.addEventListener("change", fetchLiveData);
   }
 
+  // Event submit form (POST absensi)
   form.addEventListener("submit", async function(e) {
     e.preventDefault();
     const nama = document.getElementById("nama").value.trim();
     const nim = document.getElementById("nim").value.trim();
     const kelas = document.getElementById("kelas").value;
     const mataKuliah = document.getElementById("mataKuliah").value;
+
     if (!nama || !nim || !kelas || !mataKuliah) {
       showSnackbar("Mohon lengkapi semua data.");
       return;
     }
+
     loader.style.display = "block";
     try {
       const lokasi = await getLocation().catch(() => "");
@@ -108,6 +144,7 @@ document.addEventListener("DOMContentLoaded", function() {
         mataKuliah: mataKuliah,
         lokasi: lokasi
       };
+
       const postURL = "https://script.google.com/macros/s/AKfycbzQcm6b6ej9XEei8Jd-o1P684w-YEmY46e5MLmxv6bRvL-_aFjX3yXorIpoANomjKea/exec";
       await fetch(postURL, {
         method: "POST",
