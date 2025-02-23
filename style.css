@@ -1,18 +1,19 @@
-/* ========== GLOBAL STYLES ========== */
+/* ========== GLOBAL VARIABLES ========== */
 :root {
-  --primary-color: #4caf50;
-  --secondary-color: rgba(30, 30, 30, 0.85);
+  --primary-color: #1abc9c;
+  --secondary-color: rgba(40, 40, 40, 0.9);
   --text-color: #ffffff;
-  --hover-color: #45a049;
-  --accent-color: rgba(255, 255, 255, 0.2);
-  --background-gradient-start: #2f2f2f;
-  --background-gradient-end: #000;
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --input-bg: rgba(42, 42, 42, 0.95);
-  --spacing-xs: 0.5rem;
-  --spacing-sm: 1rem;
-  --spacing-md: 1.5rem;
-  --spacing-lg: 2rem;
+  --hover-color: #16a085;
+  --accent-color: rgba(255, 255, 255, 0.1);
+  --background-gradient-start: #232526;
+  --background-gradient-end: #414345;
+  --glass-border: rgba(255, 255, 255, 0.15);
+  --input-bg: rgba(50, 50, 50, 0.85);
+  --spacing-xs: 0.4rem;
+  --spacing-sm: 0.8rem;
+  --spacing-md: 1.2rem;
+  --spacing-lg: 1.8rem;
+  --border-radius: 12px;
 }
 
 * {
@@ -39,17 +40,17 @@ body {
   width: 100%;
   height: 100%;
   z-index: 0;
-  background: radial-gradient(circle at center, var(--background-gradient-start), var(--background-gradient-end));
-  opacity: 0.8;
-  animation: animateBg 8s infinite alternate ease-in-out;
+  background: linear-gradient(135deg, var(--background-gradient-start), var(--background-gradient-end));
+  opacity: 0.85;
+  animation: animateBg 10s ease-in-out infinite alternate;
 }
 
 @keyframes animateBg {
   0% {
-    background: radial-gradient(circle at center, #2f2f2f, #000);
+    background: linear-gradient(135deg, var(--background-gradient-start), var(--background-gradient-end));
   }
   100% {
-    background: radial-gradient(circle at 40% 60%, #191919, #000);
+    background: linear-gradient(135deg, var(--background-gradient-end), var(--background-gradient-start));
   }
 }
 
@@ -59,22 +60,22 @@ body {
   z-index: 1;
   background: var(--secondary-color);
   padding: var(--spacing-lg);
-  border-radius: 16px;
+  border-radius: var(--border-radius);
   width: 95%;
   max-width: 480px;
   margin: var(--spacing-lg) auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-  backdrop-filter: blur(8px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
   border: 1px solid var(--glass-border);
   display: grid;
   grid-gap: var(--spacing-md);
-  animation: fadeIn 1s ease-in-out;
+  animation: fadeIn 0.8s ease-out;
 }
 
 @media (min-width: 768px) {
   .container {
     width: 90%;
-    padding: var(--spacing-lg) var(--spacing-lg);
+    padding: var(--spacing-lg);
   }
 }
 
@@ -82,7 +83,8 @@ h1 {
   text-align: center;
   color: var(--primary-color);
   margin-bottom: var(--spacing-md);
-  font-size: 1.75rem;
+  font-size: 1.8rem;
+  letter-spacing: 0.5px;
 }
 
 h1 i {
@@ -107,32 +109,21 @@ h1 i {
 .input-group input,
 .input-group select {
   width: 100%;
-  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) 2.5rem;
+  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-sm) calc(2.5rem);
   border: 2px solid var(--accent-color);
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   background-color: var(--input-bg);
   color: var(--text-color);
   font-size: 1rem;
   transition: all 0.3s ease;
-  min-height: 48px; /* Minimum touch target size */
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-/* Custom select styling */
-.input-group select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%234caf50' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: calc(100% - 1rem) center;
-  padding-right: 2.5rem;
+  min-height: 48px;
 }
 
 .input-group input:focus,
 .input-group select:focus {
   border-color: var(--primary-color);
   outline: none;
-  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+  box-shadow: 0 0 0 3px rgba(26, 188, 156, 0.3);
 }
 
 /* ========== BUTTON STYLES ========== */
@@ -140,9 +131,9 @@ button {
   width: 100%;
   padding: var(--spacing-sm);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   background-color: var(--primary-color);
-  color: #fff;
+  color: var(--text-color);
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 1.1rem;
@@ -157,8 +148,8 @@ button {
 
 button:hover {
   background-color: var(--hover-color);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(22, 160, 133, 0.3);
 }
 
 button:active {
@@ -183,7 +174,7 @@ button:active {
   width: 100%;
   padding: var(--spacing-sm);
   border: 2px solid var(--accent-color);
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   background-color: var(--input-bg);
   color: var(--text-color);
   font-size: 1rem;
@@ -196,7 +187,7 @@ button:active {
   max-height: 300px;
   overflow-y: auto;
   padding: var(--spacing-xs);
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   background: rgba(0, 0, 0, 0.2);
 }
 
@@ -204,27 +195,43 @@ button:active {
   margin-bottom: var(--spacing-xs);
   background: var(--input-bg);
   padding: var(--spacing-sm);
-  border-radius: 6px;
+  border-radius: calc(var(--border-radius) - 2px);
   animation: fadeInItem 0.5s ease;
   border: 1px solid var(--accent-color);
 }
 
-/* ========== RESPONSIVE ADJUSTMENTS ========== */
-@media (max-width: 480px) {
-  :root {
-    --spacing-lg: 1.5rem;
-    --spacing-md: 1rem;
-    --spacing-sm: 0.75rem;
-  }
+/* ========== LOADER ========== */
+.loader {
+  border: 4px solid var(--accent-color);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+  display: none;
+  margin: var(--spacing-sm) auto;
+}
 
-  .container {
-    padding: var(--spacing-md);
-    margin: var(--spacing-sm) auto;
-  }
+/* ========== SNACKBAR ========== */
+.snackbar {
+  visibility: hidden;
+  min-width: 280px;
+  background-color: rgba(51, 51, 51, 0.95);
+  color: var(--text-color);
+  text-align: center;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-sm);
+  position: fixed;
+  z-index: 9999;
+  left: 50%;
+  bottom: var(--spacing-lg);
+  transform: translateX(-50%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
 
-  h1 {
-    font-size: 1.5rem;
-  }
+.snackbar.show {
+  visibility: visible;
+  animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
 }
 
 /* ========== ANIMATIONS ========== */
@@ -250,40 +257,18 @@ button:active {
   }
 }
 
-/* Maintain existing loader and snackbar styles */
-.loader {
-  border: 4px solid var(--accent-color);
-  border-top: 4px solid var(--primary-color);
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  animation: spin 1s linear infinite;
-  display: none;
-  margin: var(--spacing-sm) auto;
-}
-
-.snackbar {
-  visibility: hidden;
-  min-width: 280px;
-  background-color: rgba(51, 51, 51, 0.95);
-  color: #fff;
-  text-align: center;
-  border-radius: 8px;
-  padding: var(--spacing-sm);
-  position: fixed;
-  z-index: 9999;
-  left: 50%;
-  bottom: var(--spacing-lg);
-  transform: translateX(-50%);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.snackbar.show {
-  visibility: visible;
-  animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
-}
-
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+/* ========== ADDITIONAL FADE TRANSITIONS ========== */
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.fade-in {
+  opacity: 1;
+  transition: opacity 0.3s;
 }
