@@ -3,72 +3,148 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Aplikasi Absensi</title>
+  <title>Smart Attendance System</title>
   <link rel="icon" href="icon.png" type="image/png">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="style.css" />
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="background-animation"></div>
-  
-  <div class="container">
-    <h1><i class="fa-solid fa-user-check"></i> Absensi Mahasiswa</h1>
-    <form id="absensiForm">
-      <div class="input-group">
-        <i class="fa-solid fa-user"></i>
-        <input type="text" id="nama" name="nama" placeholder="Nama" required />
-      </div>
-      <div class="input-group">
-        <i class="fa-solid fa-id-badge"></i>
-        <input type="text" id="nim" name="nim" placeholder="NIM" required />
-      </div>
-      <div class="input-group">
-        <i class="fa-solid"></i>
-        <select id="kelas" name="kelas" required>
-          <option value="">Pilih Kelas</option>
-          <option value="A">A</option>
-          <option value="B">B</option>
-          <option value="-">-</option>
-        </select>
-      </div>
-      <div class="input-group">
-        <i class="fa-solid"></i>
-        <select id="mataKuliah" name="mataKuliah" required>
-          <option value="">Pilih Mata Kuliah</option>
-          <option value="Cloud Computing">Cloud Computing</option>
-          <option value="Pemrograman Web">Pemrograman Web</option>
-          <option value="Desain dan Manajemen Jaringan Komputer">Desain dan Manajemen Jaringan Komputer</option>
-        </select>
-      </div>
-      <!-- Lokasi didapatkan secara otomatis -->
-      <input type="hidden" id="lokasi" name="lokasi" />
-      <button type="submit"><i class="fa-solid fa-paper-plane"></i> Submit Absensi</button>
-    </form>
-
-    <!-- Dropdown untuk memilih MK live feed -->
-    <div class="mk-selection">
-      <label for="liveMK">Pilih MK untuk Lihat Absensi:</label>
-      <select id="liveMK">
-        <option value="Cloud Computing">Cloud Computing</option>
-        <option value="Pemrograman Web">Pemrograman Web</option>
-        <option value="Desain dan Manajemen Jaringan Komputer">Desain dan Manajemen Jaringan Komputer</option>
-      </select>
-    </div>
-
-    <!-- Loader -->
-    <div class="loader" id="loader"></div>
-
-    <!-- Live Feed: Data absensi untuk MK yang dipilih (hanya satu pekan aktif) -->
-    <h2>Live - Pekan ke: <span id="currentPekan">?</span></h2>
-    <div id="submittedList" class="submitted-list"></div>
+  <!-- Animated Background -->
+  <div class="background-animation">
+    <div class="particles" id="particles"></div>
   </div>
-
-  <!-- Snackbar -->
-  <div id="snackbar" class="snackbar"></div>
-
+  
+  <!-- Main App Container -->
+  <div class="app-container">
+    <!-- Main Card -->
+    <div class="card">
+      <!-- Card Header -->
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-user-check"></i>
+          <h1>Absensi Mahasiswa</h1>
+        </div>
+      </div>
+      
+      <!-- Card Body -->
+      <div class="card-body">
+        <!-- Attendance Form -->
+        <form id="absensiForm">
+          <div class="form-section">
+            <div class="form-section-title">Data Pribadi</div>
+            
+            <div class="form-group">
+              <label for="nama">Nama Lengkap</label>
+              <div class="input-wrapper">
+                <i class="fas fa-user"></i>
+                <input type="text" id="nama" name="nama" class="form-control" placeholder="Masukkan nama lengkap" required />
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="nim">Nomor Induk Mahasiswa</label>
+              <div class="input-wrapper">
+                <i class="fas fa-id-badge"></i>
+                <input type="text" id="nim" name="nim" class="form-control" placeholder="Masukkan NIM" required />
+              </div>
+            </div>
+          </div>
+          
+          <div class="form-section">
+            <div class="form-section-title">Informasi Kelas</div>
+            
+            <div class="form-group">
+              <label for="kelas">Kelas</label>
+              <div class="input-wrapper">
+                <i class="fas fa-users"></i>
+                <select id="kelas" name="kelas" class="form-control" required>
+                  <option value="">Pilih Kelas</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="-">-</option>
+                </select>
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="mataKuliah">Mata Kuliah</label>
+              <div class="input-wrapper">
+                <i class="fas fa-book"></i>
+                <select id="mataKuliah" name="mataKuliah" class="form-control" required>
+                  <option value="">Pilih Mata Kuliah</option>
+                  <option value="Cloud Computing">Cloud Computing</option>
+                  <option value="Pemrograman Web">Pemrograman Web</option>
+                  <option value="Desain dan Manajemen Jaringan Komputer">Desain dan Manajemen Jaringan Komputer</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Hidden location field -->
+          <input type="hidden" id="lokasi" name="lokasi" />
+          
+          <div class="btn-container">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-paper-plane"></i>
+              <span>Submit Absensi</span>
+            </button>
+          </div>
+        </form>
+        
+        <!-- Divider -->
+        <div class="divider">Live Feed</div>
+        
+        <!-- Live Feed Section -->
+        <div class="live-feed-wrapper">
+          <div class="form-group">
+            <label for="liveMK">Pilih MK untuk Lihat Absensi</label>
+            <div class="input-wrapper">
+              <i class="fas fa-filter"></i>
+              <select id="liveMK" class="form-control">
+                <option value="Cloud Computing">Cloud Computing</option>
+                <option value="Pemrograman Web">Pemrograman Web</option>
+                <option value="Desain dan Manajemen Jaringan Komputer">Desain dan Manajemen Jaringan Komputer</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Loader -->
+          <div class="loader-container">
+            <div class="loader" id="loader"></div>
+          </div>
+          
+          <!-- Live Attendance Feed -->
+          <div class="live-feed-header">
+            <div class="live-feed-title">
+              <span class="live-indicator"></span>
+              Live Attendance
+            </div>
+            <div class="pekan-badge">
+              <i class="fas fa-calendar-week"></i>
+              Pekan ke-<span id="currentPekan">?</span>
+            </div>
+          </div>
+          
+          <div id="submittedList" class="live-feed"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification Toast -->
+  <div id="notification" class="notification">
+    <div class="notification-content">
+      <i class="fas fa-info-circle notification-icon"></i>
+      <span class="notification-message"></span>
+    </div>
+    <button class="notification-close">&times;</button>
+  </div>
+  
+  <!-- Custom JS -->
   <script src="script.js"></script>
 </body>
 </html>
