@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", function() {
     notification.classList.remove("show");
   });
   
-  // Waktu maksimal polling (dalam ms) → 7 menit
-  const MAX_POLLING_DURATION = 7 * 60 * 1000; // 420.000 ms
+  // Waktu maksimal polling (dalam ms) → 3 menit
+  const MAX_POLLING_DURATION = 3 * 60 * 1000; // 180.000 ms
   // Interval polling (dalam ms) → 5 detik
   const POLLING_INTERVAL = 5000;
 
